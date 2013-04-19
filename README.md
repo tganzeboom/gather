@@ -7,4 +7,4 @@ Since python is already installed on many systems, I thought it came in handy. I
 
 Thought it was fun to make.
 
-It's not yet finished. Give me some idea's to work with.
+It works but needs further improvements. If you have some ideas I'll look to see if I can incorporate them.
