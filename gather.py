@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Written by tganzeboom 20-4-2013
-# No warranty
+# GPLv2
 
 import getpass, os, platform, re, subprocess, sys, time
 from datetime import timedelta
