@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Written by tganzeboom 20-4-2013
+## Written by tganzeboom 20-4-2013
 # GPLv2
 
 import getpass, os, platform, re, subprocess, sys, time
