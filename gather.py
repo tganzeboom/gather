@@ -19,7 +19,9 @@ def simple():
 
     gathersimple['kernel'] = uname[0]
     gathersimple['hostname'] = uname[1]
-    gathersimple['kernelmajorversion'] = uname[2][:3]
+    kmv = uname[2].split('.')
+    gathersimple['kernelmajorversion'] = kmv[0] + '.' + kmv[1]
+#    gathersimple['kernelmajorversion'] = uname[2][:3]
     gathersimple['kernelrelease'] = uname[2]
     kv = re.compile(r'.*?-')
     reskv = kv.findall(uname[2])
@@ -145,20 +147,27 @@ def notsimple(gathersimple):
     gathernotsimple['swaptotal'] = resswaptotal[0].lstrip('SwapTotal:').strip()
     gathernotsimple['swapfree'] = resswapfree[0].lstrip('SwapFree:').strip()
 
-## if statements for debian / redhat / suse / Ubuntu / Centos
+## if statements for Debian / Redhat / Suse / Ubuntu / Centos / Linuxmint
     if gathersimple['operatingsystem'] == 'Ubuntu':
         gathernotsimple['osfamily'] = 'Debian'
-    if gathersimple['operatingsystem'] == 'Debian':
+    elif gathersimple['operatingsystem'] == 'Debian':
         gathernotsimple['osfamily'] = 'Debian'
+#    elif gathersimple['operatingsystem'] == 'LinuxMint':
+#        gathernotsimple['osfamily'] = 'Debian'
     elif gathersimple['operatingsystem'] == 'Red Hat Enterprise Linux Server':
         gathernotsimple['osfamily'] = 'RedHat'
     elif gathersimple['operatingsystem'] == 'CentOS':
         gathernotsimple['osfamily'] = 'RedHat'
+    else:
+        gathernotsimple['osfamily'] = 'Unknown'
 
     if gathernotsimple['osfamily'] == 'Debian':
         gathernotsimple['architecture'] = 'amd64'
     elif gathernotsimple['osfamily'] == 'RedHat':
         gathernotsimple['architecture'] = 'x86_64'
+    else:
+        gathernotsimple['osfamily'] = 'Unknown'
+        gathernotsimple['architecture'] = 'Unknown'
 
 # Check if I am a virtual or something else.
 # lspci is not in the /sbin directory on RedHat, but in /usr/bin/. This needs to be handled.
@@ -166,6 +175,9 @@ def notsimple(gathersimple):
         lspci = '/usr/bin/lspci'
     elif gathernotsimple['osfamily'] == 'RedHat':
         lspci = '/sbin/lspci'
+    else:
+        gathernotsimple['osfamily'] = 'Unknown'
+        lspci = '/usr/bin/lspci'
     v = subprocess.Popen(lspci, stdout=subprocess.PIPE)
     vout, verr = v.communicate()
 # Needs some more TLC.
@@ -231,7 +243,7 @@ def notsimple(gathersimple):
 
 if __name__ == "__main__":
 
-    seperator = '=>'
+    seperator = '<>'
     simpleinfo = simple()
     notsimpleinfo = notsimple(simpleinfo)
     simpleinfo.update(notsimpleinfo)
